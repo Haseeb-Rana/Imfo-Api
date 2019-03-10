@@ -205,9 +205,9 @@ Response
   "success": true,
 	"data":{
 	    "id": '3f5614a0-f4a4-11e8-b6b7-771eeb9fc014',
-	    "fullName": "Faizan AH",
+	    "fullName": "Haseeb Ahmed",
 	    "password": "$2a$10$Ze9c2PFdo6DbYtpyJyZJNutymqI71uhOJkkp5ROcPM.ynbG0dyO",
-	    "email": "faizan.ahmad@virtualforce.io",
+	    "email": "haseeb.ahmed.cs@gmail.com",
 	    "createdAt": "2018-11-30T07:46:19.173Z",
 	    "updatedAt": "2018-11-30T07:46:19.173Z"
 	},
@@ -221,7 +221,7 @@ Using your account credentials you need to create a session to receive a token t
 Post request to`/v1/login/`
 ```
 {
-	"email": "faizan.ahmad@virtualforce.io",
+	"email": "haseeb.ahmed.cs@gmail.com",
 	"password": "password"
 }
 ```
@@ -232,10 +232,10 @@ Response
     "success": true,
     "data": {
         "id": "bee3b2e0-f891-11e8-b8c1-933c34245602",
-        "fullName": "Faizan Ahmad",
+        "fullName": "Haseeb Ahmed",
         "avatar": null,
         "phone": null,
-        "email": "faizan.ahmad@virualfore.io",
+        "email": "haseeb.ahmed.cs@gmail.com",
         "createdAt": "2018-12-05T13:29:09.000Z",
         "updatedAt": "2018-12-05T13:29:09.000Z"
     },
@@ -250,7 +250,7 @@ Using your account credentials you need to create a session to receive a token t
 Post request to`/v1/auth/login/`
 ```
 {
-	"email": "faizan.ahmad@virtualforce.io",
+	"email": "haseeb.ahmed.cs@gmail.com",
 	"access_token": "Facebook Access Token"
 }
 ```
@@ -261,10 +261,10 @@ Response
     "success": true,
     "data": {
         "id": "bee3b2e0-f891-11e8-b8c1-933c34245602",
-        "fullName": "Faizan Ahmad",
+        "fullName": "Haseeb Ahmed",
         "avatar": null,
         "phone": null,
-        "email": "faizan.ahmad@virualfore.io",
+        "email": "haseeb.ahmed.cs@gmail.com",
         "createdAt": "2018-12-05T13:29:09.000Z",
         "updatedAt": "2018-12-05T13:29:09.000Z"
     },

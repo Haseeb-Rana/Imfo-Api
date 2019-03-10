@@ -12,9 +12,9 @@ const swaggerDefinition = {
     version: version,
     description: description,
     contact: {
-      name: 'VF Support',
-      url: 'https://www.virtualforce.io/support',
-      email: 'support@virtualforce.io'
+      name: 'Haseeb Ahmed',
+      url: 'http://haseeb.ahmed.info/',
+      email: 'haseeb.ahmed.cs@gmail.com'
     },
     host: ENV.host,
     basePath: '/v1'
