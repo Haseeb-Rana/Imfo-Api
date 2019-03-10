@@ -1,0 +1,216 @@
+paths:
+  /v1/places/:
+    get:
+      tags:
+        - Place
+      summary: Get Places Information
+      description: Returns a list of the available Places
+      produces:
+      - application/json
+      security:
+        - x-access-token: []
+      parameters:
+        - name: search
+          in: query
+          type: string
+        - name: topSort
+          in: query
+          type: string
+          description: It's value must be asc or desc.
+        - name: pagination
+          in: query
+          type: boolean
+          description: pagination default value is true
+        - name: page
+          in: query
+          type: string
+          description: Default page value is 1
+        - name: size
+          in: query
+          type: string
+          description: Default page size is 25
+      responses:
+        "200":
+          description: A list of places with pagination
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/definitions/Place"
+                  reviews:
+                    type: array
+                    items:
+                      $ref: "#/definitions/Review"
+              pagination:
+                $ref: "#/definitions/Pagination"
+
+              message:
+                type: string
+                description: Place successfully created/Reterived
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - Place
+      summary: create or find a place by google place id
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: create
+        description: It enables to create or find a place
+        required: true
+        schema:
+          type: object
+          required:
+            - googlePlaceId
+          properties:
+            googlePlaceId:
+              type: string
+              description: Google Place ID
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/definitions/Place"
+              message:
+                type: string
+                description: Place successfully created/Reterived
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /v1/places/{id_or_google_place_id}:
+      get:
+        tags:
+          - Place
+        summary: Find a place by id or googlePlaceId
+        description: Find a place by id or googlePlaceId
+        security:
+          - x-access-token: []
+        parameters:
+          - name: id_or_google_place_id
+            in: path
+            required: true
+            type: string
+        produces:
+        - application/json
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  default: true
+                data:
+                  type: array
+                  items:
+                    $ref: "#/definitions/Place"
+                message:
+                  type: string
+                  description: Place successfully Reterived
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/Error"
+  /v1/places/{googlePlaceId_or_placeId}/reviews/:
+    get:
+      tags:
+        - Review
+      summary: list of reviews of a give place
+      security:
+        - x-access-token: []
+      produces:
+      - application/json
+      parameters:
+        - name: googlePlaceId_or_placeId
+          description: It's a system place ID or Google Place ID
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+               type: array
+               items:
+                  $ref: "#/definitions/Review"
+              message:
+                type: string
+                description: List of Reviews
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  Place:
+    type: object
+    required:
+      - googlePlaceId
+    properties:
+      id:
+        type: UUID
+        description: Unique uuid of user
+      googlePlaceId:
+        type: string
+        description: Google Place ID
+      name:
+        type: string
+        description: Place Name
+      address:
+        type: string
+        description: Place Address
+      contact:
+        type: string
+        description: Place Contact Information
+      latitude:
+        type: decimal
+        description: Place latitude
+      longitude:
+        type: decimal
+        description: Place longitude
+      rating:
+        type: float
+        description: Google place rating
+      website:
+        type: string
+        description: Place website address
+      mapUrl:
+        type: string
+        description: Place google map url
+      reviewsCount:
+        type: number
+        description: Total number of reviews associated with this place
+      likesCount:
+        type: number
+        description: Total Count of likes
+      dislikesCount:
+        type: number
+        description: Total Count of dislikes
+      createdAt:
+        type: string
+      updatedAt:
+        type: string

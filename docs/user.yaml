@@ -1,0 +1,380 @@
+paths:
+  /v1/signup/:
+    post:
+      tags:
+        - Registration
+      summary: create a new user account
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: sign up
+        description: It enables a user to create an account
+        required: true
+        schema:
+          type: object
+          required:
+            - fullName
+            - email
+            - password
+          properties:
+            fullName:
+              type: string
+              description: User Full name
+            email:
+              type: string
+              description: Email address of User
+            password:
+              type: string
+              description: User password
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                $ref: "#/definitions/User"
+              token:
+                type: string
+                description: JWT token to authenticate all other api requests.
+              message:
+                type: string
+                description: Congrats! You have successfully registered
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /v1/auth/facebook:
+      post:
+        tags:
+          - Social
+        summary: create a new user account through facebbok
+        produces:
+          - application/json
+        parameters:
+        - in: body
+          name: sign up
+          description: It enables a user to create an account
+          required: true
+          schema:
+            type: object
+            required:
+              - access_token
+            properties:
+              access_token:
+                type: string
+                description: User facebook access token
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  default: true
+                data:
+                  $ref: "#/definitions/User"
+                token:
+                  type: string
+                  description: JWT token to authenticate all other api requests.
+                message:
+                  type: string
+                  description: Congrats! You have successfully registered
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/Error"
+  /v1/login/:
+    post:
+      tags:
+        - Session
+      summary: login a user account
+      description: Using your account credentials you need to create a session to receive a token to authenticate all other API calls.
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: login
+        description: It enables a user to authenticate all other API calls.
+        required: true
+        schema:
+          type: object
+          required:
+            - email
+            - password
+          properties:
+            email:
+              type: string
+              description: Email address of User
+            password:
+              type: string
+              description: User password
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                $ref: "#/definitions/User"
+              message:
+                type: string
+                description: Congrats! You have successfully login.
+              token:
+                type: string
+                description: JWT token to authenticate all other api requests.
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /v1/me/:
+      get:
+        tags:
+          - User
+        summary: Fetch Logged in user details
+        description:
+        security:
+          - x-access-token: []
+        produces:
+        - application/json
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  default: true
+                data:
+                  $ref: "#/definitions/User"
+                message:
+                  type: string
+                  description: Congrats! You have successfully login.
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/Error"
+      patch:
+        tags:
+          - User
+        summary: Update current user
+        description:
+        security:
+          - x-access-token: []
+        produces:
+          - application/json
+        consumes:
+          - multipart/form-data
+        parameters:
+          - name: fullName
+            description: User full name
+            in: formData
+            type: string
+          - in: formData
+            name: avatar
+            type: file
+            description: The file to upload.
+          - in: formData
+            name: phone
+            type: string
+            description: User phone number
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  default: true
+                data:
+                  $ref: "#/definitions/User"
+                message:
+                  type: string
+                  description: Successfully updated.
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/Error"
+  /v1/users/{id}:
+    get:
+      tags:
+        - User
+      summary: Fetch user detail by id
+      description:
+      security:
+        - x-access-token: []
+      produces:
+      - application/json
+      parameters:
+        - name: id
+          description: The User ID
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                $ref: "#/definitions/User"
+              message:
+                type: string
+                description: Successfully reterieved
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /v1/users/{userId}/reviews/:
+      get:
+        tags:
+          - User
+        summary: list of reviews of a give user
+        security:
+          - x-access-token: []
+        produces:
+        - application/json
+        parameters:
+          - name: userId
+            description: The User ID
+            in: path
+            required: true
+            type: string
+          - name: pagination
+            in: query
+            type: boolean
+            description: pagination default value is true
+          - name: page
+            in: query
+            type: string
+            description: Default page value is 1
+          - name: size
+            in: query
+            type: string
+            description: Default page size is 25
+        responses:
+          "200":
+            description: List of reviews of giver user with paginated result.
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  default: true
+                data:
+                 type: array
+                 items:
+                  $ref: "#/definitions/Review"
+                pagination:
+                  $ref: "#/definitions/Pagination"
+                message:
+                  type: string
+                  description: List of Reviews
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/Error"
+  /v1/users/{userId}/attachments/:
+    get:
+      tags:
+        - User
+      summary: list of attachments of a give user
+      security:
+        - x-access-token: []
+      produces:
+      - application/json
+      parameters:
+        - name: userId
+          description: The User ID
+          in: path
+          required: true
+          type: string
+        - name: pagination
+          in: query
+          type: boolean
+          description: pagination default value is true
+        - name: page
+          in: query
+          type: string
+          description: Default page value is 1
+        - name: size
+          in: query
+          type: string
+          description: Default page size is 25
+      responses:
+        "200":
+          description: List of attachments of giver user with paginated result.
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+               type: array
+               items:
+                $ref: "#/definitions/Attachment"
+              pagination:
+                $ref: "#/definitions/Pagination"
+              message:
+                type: string
+                description: List of Attachments
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  User:
+    type: object
+    required:
+      - fullName
+      - email
+    properties:
+      id:
+        type: uuid
+        description: Unique uuid of user
+      fullName:
+        type: string
+        description: User Full name
+      email:
+        type: string
+        description: Email address of User
+      phone:
+        type: string
+        description: Phone number of user
+      avatar:
+        type: string
+        description: Profile Image of user
+      reviewsCount:
+        type: number
+        description: Total number of reviews created by this user
+      likesCount:
+        type: number
+        description: Total number of liked reviews created by this user
+      dislikesCount:
+        type: number
+        description: Total number of disliked reviews created by this user
+      photosCount:
+        type: number
+        description: Total number of photos posted by this user
+      videosCount:
+        type: number
+        description: Total number of videos posted by this user
+      createdAt:
+        type: string
+      updatedAt:
+        type: string

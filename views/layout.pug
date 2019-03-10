@@ -1,0 +1,31 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    title IMFO Snap, Search, Discover
+    // Le HTML5 shim, for IE6-8 support of HTML5 elements
+    //if lt IE 9
+      script(src="http://html5shim.googlecode.com/svn/trunk/html5.js")
+    //if lt IE 8
+      script(src="http://html5shim.googlecode.com/svn/trunk/html5.js")
+    //if lt IE 7
+      script(src="http://html5shim.googlecode.com/svn/trunk/html5.js")
+    // view port
+    link(rel='stylesheet', href='/css/all.css')
+    meta(name='viewport' content='windth=device-width, initial-scale=1')
+  body
+    .top-bar
+      .bar-logo
+        img(src="/logo.png" alt="IMFO Logo")
+        span IMFO
+    .container
+      if messages.error
+        .alert.alert-danger
+          div= messages.error
+      if messages.info
+        .alert.alert-info
+          div= messages.info
+      if messages.success
+        .alert.alert-success
+          div= messages.success
+      block content

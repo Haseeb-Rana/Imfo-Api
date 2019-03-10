@@ -1,0 +1,167 @@
+paths:
+  /v1/places/{googlePlaceId}/reviews/:
+    post:
+      tags:
+        - Review
+      summary: post a new review
+      consumes:
+        - multipart/form-data
+      security:
+        - x-access-token: []
+      produces:
+      - application/json
+      parameters:
+        - name: googlePlaceId
+          description: It's a Google Place ID
+          in: path
+          required: true
+          type: string
+        - in: formData
+          name: attachment
+          type: file
+          required: true
+          description: The file to upload.
+        - in: formData
+          name: thumbnail
+          type: file
+          description: The thumbnail of the uploaded attachment.
+        - in: formData
+          name: isLiked
+          type: boolean
+          required: true
+          description: It's value is true when user liked a place or false for dislike
+        - in: formData
+          name: body
+          type: string
+          required: true
+          description: Review body message
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                $ref: "#/definitions/Review"
+              message:
+                type: string
+                description: Review successfully created
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /v1/reviews/{id}:
+    get:
+      tags:
+        - Review
+      summary: Find a review
+      security:
+        - x-access-token: []
+      produces:
+      - application/json
+      parameters:
+        - name: id
+          description: Review ID
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                $ref: "#/definitions/Review"
+              message:
+                type: string
+                description: List of Riews
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /v1/reviews/{reviewId}/report:
+      post:
+        tags:
+          - Review
+        summary: Report a review
+        security:
+          - x-access-token: []
+        produces:
+        - application/json
+        parameters:
+          - name: reviewId
+            description: Review ID
+            in: path
+            required: true
+            type: string
+          - in: body
+            name: issue
+            required: true
+            schema:
+              type: object
+              required:
+                - issueId
+              properties:
+                issueId:
+                  type: integer
+                  description: Issue Id
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  default: true
+                message:
+                  type: string
+                  description: Successfully submitted.
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/Error"
+definitions:
+  Review:
+    type: object
+    required:
+      - id
+      - body
+      - isLiked
+      - googlePlaceId
+      - placeId
+      - createdById
+    properties:
+      id:
+        type: UUID
+        description: Unique uuid of user
+      googlePlaceId:
+        type: string
+        description: Google Place ID
+      body:
+        type: string
+        description: Review Body
+      isLiked:
+        type: boolean
+        description: It's value is true when user liked a place or false for dislike
+      placeId:
+        type: string
+        description: This key reference the place object
+      createdById:
+        type: string
+        description: This key reference the user who posted a review.
+      attachments:
+        type: array
+        items:
+          $ref: "#/definitions/Attachment"
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
