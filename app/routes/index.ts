@@ -7,7 +7,7 @@ import {ENV} from './../config'
 
 export class Routes {
   public init(app): void {
-    app.use(subdomain(ENV.API_POINT || 'api', apiRoutes.initRoutes(app, express.Router())))
+    app.use(apiRoutes.initRoutes(app, express.Router()))
     app.use(base.initRoutes(app, express.Router()))
     // app.use(apiRoutes.initRoutes(app, express.Router()))
     // app.use(subdomain('admin', adminRoutes.initRoutes(app, express.Router())))
